@@ -4,7 +4,10 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
+import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 
 public class TodosTests {
@@ -55,9 +58,15 @@ public class TodosTests {
     public void
     testPoseToDos() {
 
-        when().
-                post("/todos").
-                then()
-                .statusCode(200);
+        Map<String, String> request = new HashMap<>();
+        request.put("title", "someTitle");
+
+        given()
+                .contentType("application/json")
+                .body(request).
+        when()
+                .post("/todos")
+                .then()
+                .statusCode(201);
     }
 }
