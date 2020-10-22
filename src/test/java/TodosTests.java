@@ -1,7 +1,5 @@
 import io.restassured.RestAssured;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
 import java.io.InputStream;
 import java.util.HashMap;
@@ -16,8 +14,8 @@ public class TodosTests {
 
     private static Process proc;
 
-    @BeforeClass
-    public static void setup() {
+    @Before
+    public void setup() {
         //Set base URI
         RestAssured.baseURI = "http://localhost:4567";
         System.out.println("------Set Up------");
@@ -33,8 +31,8 @@ public class TodosTests {
         }
     }
 
-    @AfterClass
-    public static void cleanUp() {
+    @After
+    public void cleanUp() {
         //stop the application
         System.out.println("------Clean Up------");
         System.out.println("Application Stopped");
