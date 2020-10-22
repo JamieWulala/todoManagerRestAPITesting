@@ -56,7 +56,7 @@ public class TodosTests {
     }
 
     @Test
-    public void testPoseTodos() {
+    public void testPostTodos() {
         //request body
         Map<String, String> requestBody = new HashMap<>();
         requestBody.put("title", "someTitle");
