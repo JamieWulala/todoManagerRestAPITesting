@@ -67,6 +67,42 @@ public class TodosTests extends ApiTest{
     }
 
     @Test
+    public void testPostTodosFailCase() {
+        //Request body with all parameters
+        Map<String, String> requestBodyFull = new HashMap<>();
+        requestBodyFull.put("title", "some title");
+        requestBodyFull.put("doneStatus", "false");
+        requestBodyFull.put("description", "some description");
+
+        //-------------------------------------------------------------------------------------------------------------
+        //create a todo with all parameters(JSON). Expected: 201 Actual: 400 (Actual case)
+        System.out.println("Test: POST /todos - Valid Operation: All parameters(JSON) - Expected: 201 Actual: 400");
+        String unexpectedError1 =
+        given().
+                contentType("application/json").
+                body(requestBodyFull).
+        when().
+                post("/todos").
+        then().
+                statusCode(400).
+                extract().
+                jsonPath().getString("errorMessages");
+        System.out.println("Unexpected error message when posting with all params: " + unexpectedError1);
+//-------------------------------------------------------------------------------------------------------------
+
+        //create a project with all parameters(JSON). Expected: 201 Actual: 400 (Expected case)
+        System.out.println("Test: POST /todos - Valid Operation: All parameters(JSON) - Expected: 201 Actual: 400");
+        given().
+                contentType("application/json").
+                body(requestBodyFull).
+        when().
+                post("/todos").
+        then().
+                statusCode(201);
+//-------------------------------------------------------------------------------------------------------------
+    }
+
+    @Test
     public void testGetSpecificTodo() {
         String todoId = "1";
         //get a specific instances of todo using a id
