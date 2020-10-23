@@ -14,27 +14,22 @@ public class TodosTests extends ApiTest{
 
     @Test
     public void testGetTodos() {
-        //get todos list
+        //get all the instances of todo
+        System.out.println("Test: GET /todos - Valid Operation");
         when().
                 get("/todos").
         then().
                 statusCode(200);
-        //get a todo item
-        when().
-                get("/todos/{id}", 1).
-        then().
-                statusCode(200).
-                body("todos.get(0).title", equalTo("scan paperwork")).
-                body("todos.get(0).id", equalTo("1"));
     }
 
     @Test
     public void testPostTodos() {
         //request body
+        String todoTitle = "clean office";
         Map<String, String> requestBody = new HashMap<>();
-        requestBody.put("title", "someTitle");
-
-        //post a todo item
+        requestBody.put("title", todoTitle);
+        //create a todo
+        System.out.println("Test: POST /todos - Valid Operation");
         given().
                 contentType("application/json").
                 body(requestBody).
@@ -42,6 +37,68 @@ public class TodosTests extends ApiTest{
                 post("/todos").
         then().
                 statusCode(201).
-                body("title", equalTo("someTitle"));
+                body("title", equalTo(todoTitle));
+
+        //create a todo without title
+        String emptyJSONPayload = "";
+        System.out.println("Test: POST /todos - Invalid Operation: No Title");
+        given().
+                contentType("application/json").
+                body(emptyJSONPayload).
+        when().
+                post("/todos").
+        then().
+                statusCode(400);
+
+        //create a todo with malformed JSON
+        String malformedJSONPayload = "{";
+        System.out.println("Test: POST /todos - Invalid Operation: Malformed JSON");
+        String errorMessage =
+        given().
+                contentType("application/json").
+                body("{\"title\": \"test title\"").
+        when().
+                post("/todos").
+        then().
+                statusCode(400).
+        extract().
+                jsonPath().getString("errorMessages");
+        System.out.println("   Known Bug/Java Exception caused by Malformed JSON : " + errorMessage);
+    }
+
+    @Test
+    public void testGetSpecificTodo() {
+        String todoId = "1";
+        String todoTitle = "scan paperwork";
+        //get a specific instances of todo using a id
+        System.out.println("Test: GET /todos/:id");
+        when().
+                get("/todos/{id}", todoId).
+        then().
+                statusCode(200).
+                body("todos.get(0).title", equalTo(todoTitle)).
+                body("todos.get(0).id", equalTo(todoId));
+    }
+
+    @Test
+    public void testPostSpecificTodo() {
+        //request body
+        String todoId = "1";
+        String todoTitle = "clean office";
+        String todoDescription = "This is a todo item for testing";
+        Map<String, String> requestBody = new HashMap<>();
+        requestBody.put("title", todoTitle);
+        requestBody.put("description", todoDescription);
+        //amend a specific instances of todo
+        System.out.println("Test: POST /todos/:id");
+        given().
+                contentType("application/json").
+                body(requestBody).
+        when().
+                post("/todos/{id}", todoId).
+        then().
+                statusCode(200).
+                body("title", equalTo(todoTitle)).
+                body("description", equalTo(todoDescription));
     }
 }

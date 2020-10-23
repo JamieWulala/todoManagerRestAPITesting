@@ -14,7 +14,7 @@ public class ApiTest {
         System.out.println("------Set Up------");
         //start the application
         try {
-            System.out.println("Starting application......");
+            //System.out.println("Starting application......");
             proc = Runtime.getRuntime().exec("java -jar runTodoManagerRestAPI-1.5.5.jar");
             InputStream in = proc.getInputStream();
             InputStream err = proc.getErrorStream();
@@ -28,7 +28,7 @@ public class ApiTest {
     public void cleanUp() {
         //stop the application
         System.out.println("------Clean Up------");
-        System.out.println("Application Stopped");
+        //System.out.println("Application Stopped");
         proc.destroy();
     }
 }
