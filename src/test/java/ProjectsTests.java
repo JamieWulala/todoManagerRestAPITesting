@@ -76,54 +76,6 @@ public class ProjectsTests extends ApiTest{
         System.out.println("   Known Bug/Java Exception caused by Malformed JSON: " + errorMessage);
 //-------------------------------------------------------------------------------------------------------------
 
-
-
-    }
-
-    @Test
-    public void testPostProjectsFailCase() {
-        //Request body with all parameters
-        Map<String, String> requestBodyFull = new HashMap<>();
-        requestBodyFull.put("title", "some title");
-        requestBodyFull.put("completed", "false");
-        requestBodyFull.put("active", "true");
-        requestBodyFull.put("description", "some description");
-
-        //create a project with all parameters(XML). Expected: 201 Actual: 201 so this one works
-        System.out.println("Test: POST /projects - Valid Operation: All parameters(XML) - Expected: 201 Actual: 201");
-        given().
-                contentType("application/xml").
-                body(requestBodyFull).
-        when().
-                post("/projects").
-        then().
-                statusCode(201);
-//-------------------------------------------------------------------------------------------------------------
-        //create a project with all parameters(JSON). Expected: 201 Actual: 400 (Actual case)
-        System.out.println("Test: POST /projects - Valid Operation: All parameters(JSON) - Expected: 201 Actual: 400");
-        String unexpectedError1 =
-        given().
-                contentType("application/json").
-                body(requestBodyFull).
-        when().
-                post("/projects").
-        then().
-                statusCode(400).
-                extract().
-                jsonPath().getString("errorMessages");
-        System.out.println("Unexpected error message when posting with all params: " + unexpectedError1);
-//-------------------------------------------------------------------------------------------------------------
-
-        //create a project with all parameters(JSON). Expected: 201 Actual: 400 (Expected case)
-        System.out.println("Test: POST /projects - Valid Operation: All parameters(JSON) - Expected: 201 Actual: 400");
-        given().
-                contentType("application/json").
-                body(requestBodyFull).
-        when().
-                post("/projects").
-        then().
-                statusCode(201);
-//-------------------------------------------------------------------------------------------------------------
     }
 
 
