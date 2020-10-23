@@ -104,7 +104,7 @@ public class TodosTests extends ApiTest{
 
     @Test
     public void testPutSpecificTodo() {
-        //put a todo with malformed XML
+        //put a todo with malformed XML file
         String todoId = "1";
         String malformedJSONPayload = "<todo>test todo";
         System.out.println("Test: PUT /todos/:id - Invalid Operation: Malformed XML");
