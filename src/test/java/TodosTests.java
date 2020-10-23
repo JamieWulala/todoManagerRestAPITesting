@@ -51,19 +51,19 @@ public class TodosTests extends ApiTest{
                 statusCode(400);
 
         //create a todo with malformed JSON
-        String malformedJSONPayload = "{";
+        String malformedJSONPayload = "{\"title\": \"test title\"";
         System.out.println("Test: POST /todos - Invalid Operation: Malformed JSON");
         String errorMessage =
         given().
                 contentType("application/json").
-                body("{\"title\": \"test title\"").
+                body(malformedJSONPayload).
         when().
                 post("/todos").
         then().
                 statusCode(400).
         extract().
                 jsonPath().getString("errorMessages");
-        System.out.println("   Known Bug/Java Exception caused by Malformed JSON : " + errorMessage);
+        System.out.println("   Known Bug/Java Exception caused by Malformed JSON: " + errorMessage);
     }
 
     @Test
@@ -100,5 +100,24 @@ public class TodosTests extends ApiTest{
                 statusCode(200).
                 body("title", equalTo(todoTitle)).
                 body("description", equalTo(todoDescription));
+    }
+
+    @Test
+    public void testPutSpecificTodo() {
+        //put a todo with malformed XML
+        String todoId = "1";
+        String malformedJSONPayload = "<todo>test todo";
+        System.out.println("Test: PUT /todos/:id - Invalid Operation: Malformed XML");
+        String errorMessage =
+                given().
+                        contentType("application/xml").
+                        body(malformedJSONPayload).
+                when().
+                        put("/todos/{id}", todoId).
+                then().
+                        statusCode(400).
+                extract().
+                        jsonPath().getString("errorMessages");
+        System.out.println("   Error Message caused by Malformed XML: " + errorMessage);
     }
 }
