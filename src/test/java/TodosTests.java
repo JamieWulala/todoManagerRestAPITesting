@@ -69,14 +69,12 @@ public class TodosTests extends ApiTest{
     @Test
     public void testGetSpecificTodo() {
         String todoId = "1";
-        String todoTitle = "scan paperwork";
         //get a specific instances of todo using a id
-        System.out.println("Test: GET /todos/:id");
+        System.out.println("Test: GET /todos/:id - Valid Operation");
         when().
                 get("/todos/{id}", todoId).
         then().
                 statusCode(200).
-                body("todos.get(0).title", equalTo(todoTitle)).
                 body("todos.get(0).id", equalTo(todoId));
     }
 
@@ -90,7 +88,7 @@ public class TodosTests extends ApiTest{
         requestBody.put("title", todoTitle);
         requestBody.put("description", todoDescription);
         //amend a specific instances of todo
-        System.out.println("Test: POST /todos/:id");
+        System.out.println("Test: POST /todos/:id - Valid Operation");
         given().
                 contentType("application/json").
                 body(requestBody).
