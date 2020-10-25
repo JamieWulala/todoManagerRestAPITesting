@@ -102,7 +102,7 @@ public class TodosTests extends ApiTest{
         //get head of a specific instances of todo using a id
         System.out.println("Test: HEAD /todos/:id - Valid Operation");
         when().
-            get("/todos/{id}", todoId).
+            head("/todos/{id}", todoId).
         then().
             statusCode(200);
     }
