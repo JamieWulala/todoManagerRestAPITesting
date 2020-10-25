@@ -25,36 +25,38 @@ public class ProjectsCategoriesTests extends ApiTest{
         Map<String, String> requestBodyCat = new HashMap<>();
         requestBodyCat.put("title", "New CategoryTitle");
 
-        ProjectId = given().
-                contentType("application/json")
-                .body(requestBodyProj).
-                when().
+        ProjectId =
+            given().
+                contentType("application/json").
+                body(requestBodyProj).
+            when().
                 post("/projects").
-                then().
-                statusCode(201)
-                .extract()
-                .jsonPath().getString("id");
+            then().
+                statusCode(201).
+            extract().
+                jsonPath().getString("id");
 
-        CategoryId = given().
-                contentType("application/json")
-                .body(requestBodyCat).
-                when().
+        CategoryId =
+            given().
+                contentType("application/json").
+                body(requestBodyCat).
+            when().
                 post("/categories").
-                then().
-                statusCode(201)
-                .extract()
-                .jsonPath().getString("id");
+            then().
+                statusCode(201).
+            extract().
+                jsonPath().getString("id");
 
         //Create a valid project-category relationship
         Map<String, String> requestBodyID = new HashMap<>();
         requestBodyID.put("id", CategoryId);
         given().
-                contentType("application/json").
-                body(requestBodyID).
+            contentType("application/json").
+            body(requestBodyID).
         when().
-                post("/projects/{id}/categories", ProjectId).
+            post("/projects/{id}/categories", ProjectId).
         then().
-                statusCode(201);
+            statusCode(201);
 
     }
 
@@ -63,9 +65,9 @@ public class ProjectsCategoriesTests extends ApiTest{
         //get all the categories of a project
         System.out.println("Test: GET /projects/:id/categories - Valid Operation");
         when().
-                get("/projects/{id}/categories", ProjectId).
+            get("/projects/{id}/categories", ProjectId).
         then().
-                statusCode(200);
+            statusCode(200);
     }
 
     @Test
@@ -73,73 +75,67 @@ public class ProjectsCategoriesTests extends ApiTest{
         //get all the categories of a project
         System.out.println("Test: HEAD /projects/:id/categories - Valid Operation");
         when().
-                head("/projects/{id}/categories", ProjectId).
+            head("/projects/{id}/categories", ProjectId).
         then().
-                statusCode(200);
+            statusCode(200);
     }
 
-
-
     @Test
-    public void testPostProjectCategory() {
-
+    public void testPostProjectCategoryValidId() {
         Map<String, String> requestBodyID = new HashMap<>();
         requestBodyID.put("id", CategoryId);
-        var categoryID_invalid = "9999";
 
         //post a new relationship with a new category
         System.out.println("Test: POST /projects/:id/categories - Valid Operation: new category");
         given().
-                contentType("application/json").
-                body(requestBodyID).
+            contentType("application/json").
+            body(requestBodyID).
         when().
-                post("/projects/{id}/categories", ProjectId).
+            post("/projects/{id}/categories", ProjectId).
         then().
-                statusCode(201);
+            statusCode(201);
+    }
 
-        //post a new relationship with a category that is already a category under this project
-        System.out.println("Test: POST /projects/:id/categories - valid Operation: valid category id");
-        given().
-                contentType("application/json").
-                body(requestBodyID).
-        when().
-                post("/projects/{id}/categories", ProjectId).
-        then().
-                statusCode(201);
+    @Test
+    public void testPostProjectCategoryInvalidId() {
+        Map<String, String> requestBodyID = new HashMap<>();
+        requestBodyID.put("id", CategoryId);
+        var categoryID_invalid = "9999";
 
         //post a new relationship with an non-existing category ID
         System.out.println("Test: POST /projects/:id/categories - Invalid Operation: invalid category id");
         requestBodyID.put("id", categoryID_invalid);
         given().
-                contentType("application/json").
-                body(requestBodyID).
+            contentType("application/json").
+            body(requestBodyID).
         when().
-                post("/projects/{id}/categories", ProjectId).
+            post("/projects/{id}/categories", ProjectId).
         then().
-                statusCode(404);
-
+            statusCode(404);
     }
 
     @Test
-    public void testDeleteProjectCategory() {
-
+    public void testDeleteProjectCategoryValidId() {
         var categoryID_invalid = 9999;
 
         //delete an existing category relationship
         System.out.println("Test: DELETE /projects/:id/categories/:id - valid operation: valid category");
-
         when().
-                delete("/projects/{id}/categories/{category_id}", ProjectId, CategoryId).
+            delete("/projects/{id}/categories/{category_id}", ProjectId, CategoryId).
         then().
-                statusCode(200);
+            statusCode(200);
+    }
+
+    @Test
+    public void testDeleteProjectCategoryInvalidId() {
+        var categoryID_invalid = 9999;
 
         //delete non-existing category relationship
         System.out.println("Test: DELETE /projects/:id/categories/:id - invalid operation: invalid category");
-
         when().
-                delete("/projects/{id}/categories/{category_id}", ProjectId, categoryID_invalid).
+            delete("/projects/{id}/categories/{category_id}", ProjectId, categoryID_invalid).
         then().
-                statusCode(404);
+            statusCode(404);
     }
 
 }

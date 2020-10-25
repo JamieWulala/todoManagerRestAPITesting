@@ -20,35 +20,36 @@ public class CategoriesTodosTests extends ApiTest{
         Map<String, String> requestBody = new HashMap<>();
         requestBody.put("title", "categoryTitle");
 
-        categoryId = given().
-                contentType("application/json")
-                .body(requestBody).
-                        when().
-                        post("/categories").
-                        then().
-                        statusCode(201)
-                .extract()
-                .jsonPath().getString("id");
+        categoryId =
+            given().
+                contentType("application/json").
+                body(requestBody).
+            when().
+                post("/categories").
+            then().
+                statusCode(201).
+            extract().
+                jsonPath().getString("id");
     }
 
     @Test
     public void testGetCategoriesIdTodods(){
         System.out.println("Test: GET /categories/:id/todos - Valid Operation");
 
-        when()
-                .get("/categories/{categoryId}/todos", categoryId).
-        then()
-                .statusCode(200);
+        when().
+            get("/categories/{categoryId}/todos", categoryId).
+        then().
+            statusCode(200);
     }
 
     @Test
     public void testHeadCategoriesIdTodods(){
         System.out.println("Test: HEAD /categories/:id/todos - Valid Operation");
 
-        when()
-                .head("/categories/{categoryId}/todos", categoryId).
-        then()
-                .statusCode(200);
+        when().
+            head("/categories/{categoryId}/todos", categoryId).
+        then().
+            statusCode(200);
     }
 
     @Test
@@ -57,13 +58,13 @@ public class CategoriesTodosTests extends ApiTest{
         Map<String, String> requestBody = new HashMap<>();
         requestBody.put("title", "todoTitle");
 
-        given()
-                .body(requestBody)
-                .contentType("application/json").
-        when()
-                .post("/categories/{categoryId}/todos", categoryId).
-        then()
-                .statusCode(201);
+        given().
+            body(requestBody).
+            contentType("application/json").
+        when().
+            post("/categories/{categoryId}/todos", categoryId).
+        then().
+            statusCode(201);
     }
 
     @Test
@@ -73,16 +74,16 @@ public class CategoriesTodosTests extends ApiTest{
         Map<String, String> requestBody = new HashMap<>();
         requestBody.put("id", "1");
 
-        given()
-                .body(requestBody).
-        when()
-                .post("/categories/{categoriesId}/todos", categoryId).
-        then()
-                .statusCode(201);
+        given().
+            body(requestBody).
+        when().
+            post("/categories/{categoriesId}/todos", categoryId).
+        then().
+            statusCode(201);
 
-        when()
-                .delete("/categories/{categoriesId}/todos/{projectId}", categoryId, 1)
-                .then()
-                .statusCode(200);
+        when().
+            delete("/categories/{categoriesId}/todos/{projectId}", categoryId, 1).
+        then().
+            statusCode(200);
     }
 }

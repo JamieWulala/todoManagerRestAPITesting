@@ -25,41 +25,38 @@ public class ProjectsTasksTests extends ApiTest{
         Map<String, String> requestBodyTask = new HashMap<>();
         requestBodyTask.put("title", "New Task Title");
 
-        ProjectId = given().
-                contentType("application/json")
-                .body(requestBodyProj).
-                when().
+        ProjectId =
+            given().
+                contentType("application/json").
+                body(requestBodyProj).
+            when().
                 post("/projects").
-                then().
-                statusCode(201)
-                .extract()
-                .jsonPath().getString("id");
+            then().
+                statusCode(201).
+            extract().
+                jsonPath().getString("id");
 
-
-        TaskId = given().
-                contentType("application/json")
-                .body(requestBodyTask).
-                when().
+        TaskId =
+            given().
+                contentType("application/json").
+                body(requestBodyTask).
+            when().
                 post("/todos").
-                then().
-                statusCode(201)
-                .extract()
-                .jsonPath().getString("id");
-
+            then().
+                statusCode(201).
+            extract().
+                jsonPath().getString("id");
 
         //Create a valid project-task relationship
         Map<String, String> requestBodyID = new HashMap<>();
         requestBodyID.put("id", TaskId);
         given().
-                contentType("application/json").
-                body(requestBodyID).
+            contentType("application/json").
+            body(requestBodyID).
         when().
-                post("/projects/{id}/tasks", ProjectId).
+            post("/projects/{id}/tasks", ProjectId).
         then().
-                statusCode(201);
-
-
-
+            statusCode(201);
     }
 
 
@@ -68,76 +65,76 @@ public class ProjectsTasksTests extends ApiTest{
         //get all the tasks of a project
         System.out.println("Test: GET /projects/:id/tasks - Valid Operation");
         when().
-                get("/projects/{id}/tasks", ProjectId).
+            get("/projects/{id}/tasks", ProjectId).
         then().
-                statusCode(200);
+            statusCode(200);
     }
 
     @Test
     public void testHeadProjectTasks() {
         System.out.println("Test: HEAD /projects/:id/tasks - Valid Operation");
         when().
-                head("/projects/{id}/tasks", ProjectId).
+            head("/projects/{id}/tasks", ProjectId).
         then().
-                statusCode(200);
+            statusCode(200);
     }
 
     @Test
-    public void testPostProjectTask() {
-
+    public void testPostProjectTaskValid() {
         Map<String, String> requestBodyId = new HashMap<>();
         requestBodyId.put("id", TaskId);
-
-        Map<String, String> requestBodyEmpty = new HashMap<>();
-
 
         //post a new task relationship with an existing task
         System.out.println("Test: POST /projects/:id/tasks - Valid Operation: task with title ");
         given().
-                contentType("application/json").
-                body(requestBodyId).
+            contentType("application/json").
+            body(requestBodyId).
         when().
-                post("/projects/{id}/tasks", ProjectId).
+            post("/projects/{id}/tasks", ProjectId).
         then().
-                statusCode(201);
+            statusCode(201);
+    }
 
+    @Test
+    public void testPostProjectTaskInvalid() {
+        Map<String, String> requestBodyEmpty = new HashMap<>();
 
         //post new task with EMPTY body
         System.out.println("Test: POST /projects/:id/tasks - invalid Operation: task with empty body ");
         String emptyBodyError =
-        given().
+            given().
                 contentType("application/json").
                 body(requestBodyEmpty).
-        when().
+            when().
                 post("/projects/{id}/tasks", ProjectId).
-        then().
+            then().
                 statusCode(400).
-                 extract().
+            extract().
                 jsonPath().getString("errorMessages");
-        System.out.println("Error message when posting task relationship with empty body: " + emptyBodyError);
+        System.out.println("   Error message when posting task relationship with empty body: " + emptyBodyError);
     }
 
-
     @Test
-    public void testDeleteProjectTask() {
+    public void testDeleteProjectTaskValid() {
         String taskID_invalid = "77";
-
         //delete an existing task relationship
         System.out.println("Test: DELETE /projects/:id/tasks/:id - valid operation: valid task id");
-
         when().
-                delete("/projects/{id}/tasks/{task_id}", ProjectId, TaskId).
+            delete("/projects/{id}/tasks/{task_id}", ProjectId, TaskId).
         then().
-                statusCode(200);
+            statusCode(200);
+    }
 
+    @Test
+    public void testDeleteProjectTaskInvalid() {
+        String taskID_invalid = "77";
         //delete non-existing task relationship
         System.out.println("Test: DELETE /projects/:id/taskss/:id - invalid operation: invalid task id");
 
         when().
-                delete("/projects/{id}/tasks/{task_id}", ProjectId, taskID_invalid).
+            delete("/projects/{id}/tasks/{task_id}", ProjectId, taskID_invalid).
         then().
-                statusCode(404);
+            statusCode(404);
     }
-
 
 }

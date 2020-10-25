@@ -19,33 +19,34 @@ public class CategoriesTests extends ApiTest{
         Map<String, String> requestBody = new HashMap<>();
         requestBody.put("title", "categoryTitle");
 
-        categoryId = given().
-                contentType("application/json")
-                .body(requestBody).
-                when().
+        categoryId =
+            given().
+                contentType("application/json").
+                body(requestBody).
+            when().
                 post("/categories").
-                then().
-                statusCode(201)
-                .extract()
-                .jsonPath().getString("id");
+            then().
+                statusCode(201).
+            extract().
+                jsonPath().getString("id");
     }
 
     @Test
     public void testGetCategories(){
         System.out.println("Test: GET /categories - Valid Operation");
         when().
-                get("/categories").
+            get("/categories").
         then().
-                statusCode(200);
+            statusCode(200);
     }
 
     @Test
     public void testHeadCategories(){
         System.out.println("Test: HEAD /categories - Valid Operation");
         when().
-                head("/categories").
-                then().
-                statusCode(200);
+            head("/categories").
+        then().
+            statusCode(200);
     }
 
     @Test
@@ -55,39 +56,39 @@ public class CategoriesTests extends ApiTest{
         requestBody.put("title", "categoryTitle");
 
         given().
-                contentType("application/json")
-                .body(requestBody).
+            contentType("application/json").
+            body(requestBody).
         when().
-                post("/categories").
-                then().
-                statusCode(201);
+            post("/categories").
+        then().
+            statusCode(201);
     }
 
     @Test
     public void testGetCategoriesWithId(){
         System.out.println("Test: GET /categories/:id - Valid Operation");
         when().
-                get("/categories/{id}", categoryId).
-                then().
-                statusCode(200);
+            get("/categories/{id}", categoryId).
+        then().
+            statusCode(200);
     }
 
     @Test
     public void testHeadCategoriesWithId(){
         System.out.println("Test: HEAD /categories/:id - Valid Operation");
         when().
-                head("/categories/{id}", categoryId).
-                then().
-                statusCode(200);
+            head("/categories/{id}", categoryId).
+        then().
+            statusCode(200);
     }
 
     @Test
     public void testGetCategoriesWithInvalidId(){
         System.out.println("Test: GET /categories/:id - Non-existing id Invalid Operation");
         when().
-                get("/categories/99").
-                then().
-                statusCode(404);
+            get("/categories/99").
+        then().
+            statusCode(404);
     }
 
     @Test
@@ -98,13 +99,13 @@ public class CategoriesTests extends ApiTest{
         requestBody.put("title", categoryTitle);
 
         given().
-                contentType("application/json")
-                .body(requestBody)
-        .when()
-                .post("/categories/{id}", categoryId)
-        .then()
-                .statusCode(200)
-                .body("title", equalTo(categoryTitle));
+            contentType("application/json").
+            body(requestBody).
+        when().
+            post("/categories/{id}", categoryId).
+        then().
+            statusCode(200).
+            body("title", equalTo(categoryTitle));
     }
 
     @Test
@@ -115,13 +116,13 @@ public class CategoriesTests extends ApiTest{
         requestBody.put("title", categoryTitle);
 
         given().
-                contentType("application/json")
-                .body(requestBody)
-                .when()
-                .post("/categories/{id}", categoryId)
-                .then()
-                .statusCode(200)
-                .body("title", equalTo(categoryTitle));
+            contentType("application/json").
+            body(requestBody).
+        when().
+            post("/categories/{id}", categoryId).
+        then().
+            statusCode(200).
+            body("title", equalTo(categoryTitle));
     }
 
     @Test
@@ -132,13 +133,13 @@ public class CategoriesTests extends ApiTest{
         requestBody.put("title", categoryTitle);
 
         given().
-                contentType("application/json")
-                .body(requestBody)
-        .when()
-                .post("/categories")
-        .then()
-                .statusCode(201)
-                .body("title", equalTo(categoryTitle));
+            contentType("application/json").
+            body(requestBody).
+        when().
+            post("/categories").
+        then().
+            statusCode(201).
+            body("title", equalTo(categoryTitle));
     }
 
     @Test
@@ -148,13 +149,13 @@ public class CategoriesTests extends ApiTest{
         Map<String, String> requestBody = new HashMap<>();
 
         given().
-                contentType("application/json")
-                .body(requestBody)
-        .when()
-                .post("/categories")
-        .then()
-                .statusCode(400)
-                .body("errorMessages", equalTo(errorMessage));
+            contentType("application/json").
+            body(requestBody).
+        when().
+            post("/categories").
+        then().
+            statusCode(400).
+            body("errorMessages", equalTo(errorMessage));
     }
 
     @Test
@@ -163,20 +164,20 @@ public class CategoriesTests extends ApiTest{
         Map<String, String> requestBody = new HashMap<String, String>();
         requestBody.put("title", "someTitle");
         String id =
-                given().
-                        body(requestBody).
-                        post("/categories")
-                .then().
-                        statusCode(201).
-                extract().
-                        jsonPath().getString("id");
+            given().
+                body(requestBody).
+                post("/categories").
+            then().
+                statusCode(201).
+            extract().
+                jsonPath().getString("id");
 
         given().
-                contentType("application/json")
-        .when()
-                .delete("/categories/{id}", id)
-        .then()
-                .statusCode(200);
+            contentType("application/json").
+        when().
+            delete("/categories/{id}", id).
+        then().
+            statusCode(200);
     }
 
     @Test
@@ -187,11 +188,11 @@ public class CategoriesTests extends ApiTest{
         delete("/categories/1");
 
         given().
-                contentType("application/json")
-        .when()
-                .delete("/categories/1")
-        .then()
-                .statusCode(404)
-                .body("errorMessages", equalTo(errorMessage));
+            contentType("application/json").
+        when().
+            delete("/categories/1").
+        then().
+            statusCode(404).
+            body("errorMessages", equalTo(errorMessage));
     }
 }
