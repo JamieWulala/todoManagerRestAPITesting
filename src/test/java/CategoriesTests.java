@@ -180,7 +180,7 @@ public class CategoriesTests extends ApiTest{
     }
 
     @Test
-    public void testDeleteNonExsitingCategories() {
+    public void testDeleteNonExistingCategories() {
         System.out.println("Test: Delete /Categories/:id - Non-existing id, Invalid Operation");
 
         List<String> errorMessage = Arrays.asList("Could not find any instances with categories/1");
