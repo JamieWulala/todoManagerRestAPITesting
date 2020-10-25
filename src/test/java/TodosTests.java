@@ -17,13 +17,23 @@ public class TodosTests extends ApiTest{
         //get all the instances of todo
         System.out.println("Test: GET /todos - Valid Operation");
         when().
-                get("/todos").
+            get("/todos").
         then().
-                statusCode(200);
+            statusCode(200);
     }
 
     @Test
-    public void testPostTodos() {
+    public void testHeadTodos() {
+        //get all the instances of todo
+        System.out.println("Test: HEAD /todos - Valid Operation");
+        when().
+            head("/todos").
+        then().
+            statusCode(200);
+    }
+
+    @Test
+    public void testPostTodosValidJSON() {
         //request body
         String todoTitle = "clean office";
         Map<String, String> requestBody = new HashMap<>();
@@ -31,37 +41,45 @@ public class TodosTests extends ApiTest{
         //create a todo
         System.out.println("Test: POST /todos - Valid Operation");
         given().
-                contentType("application/json").
-                body(requestBody).
+            contentType("application/json").
+            body(requestBody).
         when().
-                post("/todos").
+            post("/todos").
         then().
-                statusCode(201).
-                body("title", equalTo(todoTitle));
+            statusCode(201).
+            body("title", equalTo(todoTitle));
+    }
 
+    @Test
+    public void testPostTodosNoTitle() {
         //create a todo without title
+        //request body
         String emptyJSONPayload = "";
         System.out.println("Test: POST /todos - Invalid Operation: No Title");
         given().
-                contentType("application/json").
-                body(emptyJSONPayload).
+            contentType("application/json").
+            body(emptyJSONPayload).
         when().
-                post("/todos").
+            post("/todos").
         then().
-                statusCode(400);
+            statusCode(400);
+    }
 
+    @Test
+    public void testPostTodosMalJSON() {
         //create a todo with malformed JSON
+        //request body
         String malformedJSONPayload = "{\"title\": \"test title\"";
         System.out.println("Test: POST /todos - Invalid Operation: Malformed JSON");
         String errorMessage =
-        given().
+            given().
                 contentType("application/json").
                 body(malformedJSONPayload).
-        when().
+            when().
                 post("/todos").
-        then().
+            then().
                 statusCode(400).
-        extract().
+            extract().
                 jsonPath().getString("errorMessages");
         System.out.println("   Known Bug/Java Exception caused by Malformed JSON: " + errorMessage);
     }
@@ -72,10 +90,21 @@ public class TodosTests extends ApiTest{
         //get a specific instances of todo using a id
         System.out.println("Test: GET /todos/:id - Valid Operation");
         when().
-                get("/todos/{id}", todoId).
+            get("/todos/{id}", todoId).
         then().
-                statusCode(200).
-                body("todos.get(0).id", equalTo(todoId));
+            statusCode(200).
+            body("todos.get(0).id", equalTo(todoId));
+    }
+
+    @Test
+    public void testHeadSpecificTodo() {
+        String todoId = "1";
+        //get head of a specific instances of todo using a id
+        System.out.println("Test: HEAD /todos/:id - Valid Operation");
+        when().
+            head("/todos/{id}", todoId).
+        then().
+            statusCode(200);
     }
 
     @Test
@@ -90,14 +119,14 @@ public class TodosTests extends ApiTest{
         //amend a specific instances of todo
         System.out.println("Test: POST /todos/:id - Valid Operation");
         given().
-                contentType("application/json").
-                body(requestBody).
+            contentType("application/json").
+            body(requestBody).
         when().
-                post("/todos/{id}", todoId).
+            post("/todos/{id}", todoId).
         then().
-                statusCode(200).
-                body("title", equalTo(todoTitle)).
-                body("description", equalTo(todoDescription));
+            statusCode(200).
+            body("title", equalTo(todoTitle)).
+            body("description", equalTo(todoDescription));
     }
 
     @Test
@@ -107,15 +136,26 @@ public class TodosTests extends ApiTest{
         String malformedJSONPayload = "<todo>test todo";
         System.out.println("Test: PUT /todos/:id - Invalid Operation: Malformed XML");
         String errorMessage =
-                given().
-                        contentType("application/xml").
-                        body(malformedJSONPayload).
-                when().
-                        put("/todos/{id}", todoId).
-                then().
-                        statusCode(400).
-                extract().
-                        jsonPath().getString("errorMessages");
+            given().
+                contentType("application/xml").
+                body(malformedJSONPayload).
+            when().
+                put("/todos/{id}", todoId).
+            then().
+                statusCode(400).
+            extract().
+                jsonPath().getString("errorMessages");
         System.out.println("   Error Message caused by Malformed XML: " + errorMessage);
+    }
+
+    @Test
+    public void testDeleteSpecificTodo() {
+        String todoId = "2";
+        //delete a specific instances of todo using a id
+        System.out.println("Test: HEAD /todos/:id - Valid Operation");
+        when().
+            delete("/todos/{id}", todoId).
+        then().
+            statusCode(200);
     }
 }
