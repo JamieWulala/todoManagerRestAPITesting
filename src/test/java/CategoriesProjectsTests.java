@@ -19,40 +19,42 @@ public class CategoriesProjectsTests extends ApiTest{
         HashMap categoryRequestBody = new HashMap<>();
         categoryRequestBody.put("title", "categoryTitle");
         categoriesId =
-                given()
-                .contentType("application/json")
-                .body(categoryRequestBody)
-                .post("/categories")
-                .then()
-                .statusCode(201)
-                .extract().jsonPath().getString("id");
+            given().
+                contentType("application/json").
+                body(categoryRequestBody).
+                post("/categories").
+            then().
+                 statusCode(201).
+            extract().
+                jsonPath().getString("id");
         projectId =
-                given()
-                .contentType("application/json")
-                .post("/projects")
-                .then()
-                .statusCode(201)
-                .extract().jsonPath().getString("id");
+            given().
+                contentType("application/json").
+                post("/projects").
+            then().
+                statusCode(201).
+            extract().
+                jsonPath().getString("id");
     }
 
     @Test
     public void testGetCategoriesProjects() {
         System.out.println("Test: GET /categories/:id/projects - Valid Operation");
 
-        when()
-                .get("/categories/{categoriesId}/projects", categoriesId).
-        then()
-                .statusCode(200);
+        when().
+            get("/categories/{categoriesId}/projects", categoriesId).
+        then().
+            statusCode(200);
     }
 
     @Test
     public void testGetNonExistingCategoriesProjects() {
         System.out.println("Test: GET /categories/:id/projects - Invalid Operation");
 
-        when()
-                .get("/categories/{categoriesId}/projects", 999).
-        then()
-                .statusCode(200);
+        when().
+            get("/categories/{categoriesId}/projects", 999).
+        then().
+            statusCode(200);
         //bug caught
         System.out.println("   Known Bug/should return errorMessage and 404 status code when finding a non-existing id");
     }
@@ -61,10 +63,10 @@ public class CategoriesProjectsTests extends ApiTest{
     public void testHeadCategories() {
         System.out.println("Test: HEAD /categories/:id/projects - Valid Operation");
 
-        when()
-                .head("/categories/{categoriesId}/projects", categoriesId).
-        then()
-                .statusCode(200);
+        when().
+            head("/categories/{categoriesId}/projects", categoriesId).
+        then().
+            statusCode(200);
     }
 
     @Test
@@ -72,11 +74,11 @@ public class CategoriesProjectsTests extends ApiTest{
         System.out.println("Test: POST /categories/:id/projects - Valid Operation");
 
         given().
-                contentType("application/json").
-        when()
-                .post("/categories/{id}/projects", categoriesId).
-        then()
-                .statusCode(201);
+            contentType("application/json").
+        when().
+            post("/categories/{id}/projects", categoriesId).
+        then().
+            statusCode(201);
     }
 
     @Test
@@ -85,17 +87,17 @@ public class CategoriesProjectsTests extends ApiTest{
         Map<String, String> requestBody = new HashMap<>();
         requestBody.put("id", projectId);
 
-        given()
-                .body(requestBody).
-        when()
-                .post("/categories/{categoriesId}/projects", categoriesId).
-        then()
-                .statusCode(201);
+        given().
+            body(requestBody).
+        when().
+            post("/categories/{categoriesId}/projects", categoriesId).
+        then().
+            statusCode(201);
 
-        when()
-                .delete("/categories/{categoriesId}/projects/{projectId}", categoriesId, projectId)
-                .then()
-                .statusCode(200);
+        when().
+            delete("/categories/{categoriesId}/projects/{projectId}", categoriesId, projectId).
+        then().
+            statusCode(200);
     }
 
 }
