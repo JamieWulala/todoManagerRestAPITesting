@@ -39,7 +39,7 @@ public class TodosCategoriesTests extends ApiTest{
     }
 
     @Test
-    public void testPostTodosCategories() {
+    public void testPostTodosCategoriesMalJSON() {
         String todoId = "2";
         //create an instance of a relationship named tasksof between todo
         String malformedJSONPayload = "{\"title\": \"test title\"";
@@ -55,7 +55,12 @@ public class TodosCategoriesTests extends ApiTest{
             extract().
                 jsonPath().getString("errorMessages");
         System.out.println("   Known Bug/Java Exception caused by Malformed JSON: " + errorMessageJSON);
+    }
 
+    @Test
+    public void testPostTodosCategoriesMalXML() {
+        String todoId = "2";
+        //create an instance of a relationship named tasksof between todo
         String malformedXMLPayload = "<title>ent, sunt in culpa q</title>";
         System.out.println("Test: POST /todos/:id/categories - Invalid Operation: Malformed XML");
         String errorMessage =
@@ -63,17 +68,22 @@ public class TodosCategoriesTests extends ApiTest{
                 contentType("application/xml").
                 body(malformedXMLPayload).
             when().
-                post("/todos/{id}/categories", todoId).
+                 post("/todos/{id}/categories", todoId).
             then().
                 statusCode(400).
             extract().
                 jsonPath().getString("errorMessages");
         System.out.println("   Known Bug/Java Exception caused by Malformed XML: " + errorMessage);
+    }
 
+    @Test
+    public void testPostTodosCategoriesValidXML() {
+        String todoId = "2";
+        //create an instance of a relationship named tasksof between todo
         String validXMLPayload = "<category>\n" +
-            "  <title>test title</title>\n" +
-            "</category>";
-        System.out.println("Test: POST /todos/:id - Valid Operation");
+                "  <title>test title</title>\n" +
+                "</category>";
+        System.out.println("Test: POST /todos/:id/categories - Valid Operation");
         given().
             contentType("application/xml").
             body(validXMLPayload).
@@ -85,7 +95,7 @@ public class TodosCategoriesTests extends ApiTest{
     }
 
     @Test
-    public void testDeleteTodosTasksof() {
+    public void testDeleteTodosCategories() {
         String todoId = "2";
         String categoryId = "1";
         //delete the instance of the relationship named categories between todo
@@ -95,5 +105,7 @@ public class TodosCategoriesTests extends ApiTest{
         then().
             statusCode(404);
     }
+
+
 
 }

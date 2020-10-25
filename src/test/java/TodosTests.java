@@ -33,7 +33,7 @@ public class TodosTests extends ApiTest{
     }
 
     @Test
-    public void testPostTodos() {
+    public void testPostTodosValidJSON() {
         //request body
         String todoTitle = "clean office";
         Map<String, String> requestBody = new HashMap<>();
@@ -41,38 +41,46 @@ public class TodosTests extends ApiTest{
         //create a todo
         System.out.println("Test: POST /todos - Valid Operation");
         given().
-                contentType("application/json").
-                body(requestBody).
-        when().
-                post("/todos").
-        then().
-                statusCode(201).
-                body("title", equalTo(todoTitle));
-
-        //create a todo without title
-        String emptyJSONPayload = "";
-        System.out.println("Test: POST /todos - Invalid Operation: No Title");
-        given().
-                contentType("application/json").
-                body(emptyJSONPayload).
-        when().
-                post("/todos").
-        then().
-                statusCode(400);
-
-        //create a todo with malformed JSON
-        String malformedJSONPayload = "{\"title\": \"test title\"";
-        System.out.println("Test: POST /todos - Invalid Operation: Malformed JSON");
-        String errorMessage =
-        given().
             contentType("application/json").
-            body(malformedJSONPayload).
+            body(requestBody).
         when().
             post("/todos").
         then().
-            statusCode(400).
-        extract().
-            jsonPath().getString("errorMessages");
+            statusCode(201).
+            body("title", equalTo(todoTitle));
+    }
+
+    @Test
+    public void testPostTodosNoTitle() {
+        //create a todo without title
+        //request body
+        String emptyJSONPayload = "";
+        System.out.println("Test: POST /todos - Invalid Operation: No Title");
+        given().
+            contentType("application/json").
+            body(emptyJSONPayload).
+        when().
+            post("/todos").
+        then().
+            statusCode(400);
+    }
+
+    @Test
+    public void testPostTodosMalJSON() {
+        //create a todo with malformed JSON
+        //request body
+        String malformedJSONPayload = "{\"title\": \"test title\"";
+        System.out.println("Test: POST /todos - Invalid Operation: Malformed JSON");
+        String errorMessage =
+            given().
+                contentType("application/json").
+                body(malformedJSONPayload).
+            when().
+                post("/todos").
+            then().
+                statusCode(400).
+            extract().
+                jsonPath().getString("errorMessages");
         System.out.println("   Known Bug/Java Exception caused by Malformed JSON: " + errorMessage);
     }
 
