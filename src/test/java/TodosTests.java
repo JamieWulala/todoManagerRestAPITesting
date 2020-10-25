@@ -1,7 +1,6 @@
 import io.restassured.RestAssured;
 import org.junit.*;
 
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.lang.*;
@@ -82,6 +81,7 @@ public class TodosTests extends ApiTest{
             extract().
                 jsonPath().getString("errorMessages");
         System.out.println("   Known Bug/Java Exception caused by Malformed JSON: " + errorMessage);
+        //TODO should 1. seperate into differnt test cases 2. assert error message 3. should fail bug
     }
 
     @Test

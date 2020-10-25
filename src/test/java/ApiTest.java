@@ -14,12 +14,12 @@ public class ApiTest {
         //Set base URI
         RestAssured.baseURI = "http://localhost:4567";
         //start the application
-        System.out.print("------Set Up------");
+        //System.out.print("------Set Up------");
 
         try {
             //System.out.println("Starting application......");
             proc = Runtime.getRuntime().exec("java -jar runTodoManagerRestAPI-1.5.5.jar");
-            System.out.println("------Application started------");
+            //System.out.println("------Application started------");
             InputStream in = proc.getInputStream();
             InputStream err = proc.getErrorStream();
             Thread.sleep(1000);
@@ -31,13 +31,13 @@ public class ApiTest {
     @After
     public void cleanUp() {
         //stop the application
-        System.out.print("------Clean Up------");
+        //System.out.print("------Clean Up------");
 
         try {
             while(proc.isAlive()) {
                 proc.destroy();
             }
-            System.out.println("------Done------");
+            //System.out.println("------Done------");
         } catch (Exception e) {
             e.printStackTrace();
         }
