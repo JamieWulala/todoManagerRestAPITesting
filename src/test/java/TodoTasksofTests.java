@@ -20,7 +20,7 @@ public class TodoTasksofTests extends ApiTest{
         String todoTitle = "Office Work";
         //get all the project items related to todo
         System.out.println("Test: GET /todos/:id/tasksof - Valid Operation Line Queries");
-        System.out.println("   Undocumentated Capibility: Line Queries for GET /todos/:id/tasksof");
+        System.out.println("   Line Queries for GET /todos/:id/tasksof");
         when().
             get("/todos/{id}/tasksof?title={title}", projectId, todoTitle).
         then().

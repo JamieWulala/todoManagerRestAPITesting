@@ -16,9 +16,9 @@ public class DocsTests extends ApiTest{
         //get docs
         System.out.println("Test: GET /docs - Valid Operation");
         when().
-                get("/docs").
-                then().
-                statusCode(200);
+            get("/docs").
+            then().
+            statusCode(200);
     }
 
 }

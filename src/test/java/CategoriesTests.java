@@ -66,9 +66,10 @@ public class CategoriesTests extends ApiTest{
 
     @Test
     public void testGetCategoriesWithId(){
-        System.out.println("Test: GET /categories/:id - Valid Operation");
+        System.out.println("Test: GET /categories/:id - Valid Operation Line Queries");
+        System.out.println("   Line Queries for GET /categories/:id");
         when().
-            get("/categories/{id}", categoryId).
+            get("/categories/{id}?title={title}", categoryId, "categoryTitle").
         then().
             statusCode(200);
     }
